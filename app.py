@@ -85,7 +85,7 @@ if uploaded_file and service_key:
                     
                     if pdf_url_node is not None:
                         pdf_url = pdf_url_node.text
-                        pdf_content = get_pdf_first_page(pdf_url, num_pages=2)
+                        pdf_content = get_pdf_pages(pdf_url, num_pages=2)
                         
                         if pdf_content:
                             # ZIP 파일에 PDF 데이터 추가
