@@ -20,7 +20,7 @@ with st.sidebar:
     st.markdown("[KIPRIS Plus](https://plus.kipris.or.kr/)에서 발급받은 키를 입력하세요.")
 
 # --- PDF 처리 함수 ---
-def get_pdf_first_page(pdf_url):
+def get_pdf_pages(pdf_url, num_pages=2):
     try:
         response = requests.get(pdf_url, timeout=30)
         if response.status_code == 200:
@@ -28,9 +28,13 @@ def get_pdf_first_page(pdf_url):
             pdf_stream = io.BytesIO(response.content)
             doc = fitz.open(stream=pdf_stream, filetype="pdf")
             
-            # 첫 페이지만 추출한 새로운 PDF 생성
+            # 실제 문서의 페이지 수와 요청한 페이지 수 중 작은 값을 선택
+            # (1페이지만 있는 문서에서 2페이지를 추출하려 할 때 에러 방지)
+            end_page = min(len(doc), num_pages) - 1
+            
+            # 새 PDF 생성 및 페이지 복사 (0번부터 end_page까지)
             new_doc = fitz.open()
-            new_doc.insert_pdf(doc, from_page=0, to_page=0)
+            new_doc.insert_pdf(doc, from_page=0, to_page=end_page)
             
             # 결과물을 바이너리로 변환
             output_buffer = io.BytesIO()
@@ -81,7 +85,7 @@ if uploaded_file and service_key:
                     
                     if pdf_url_node is not None:
                         pdf_url = pdf_url_node.text
-                        pdf_content = get_pdf_first_page(pdf_url)
+                        pdf_content = get_pdf_first_page(pdf_url, num_pages=2)
                         
                         if pdf_content:
                             # ZIP 파일에 PDF 데이터 추가
