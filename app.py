@@ -11,7 +11,7 @@ import zipfile
 st.set_page_config(page_title="KIPRIS 특허 PDF 다운로더", layout="wide")
 
 st.title("📂 특허 공고전문 PDF 일괄 다운로더")
-st.info("엑셀 파일을 업로드하면 첫 페이지를 추출하여 ZIP 파일로 제공합니다.")
+st.info("엑셀 파일을 업로드하면 1,2 페이지를 추출하여 ZIP 파일로 제공합니다.")
 
 # --- 사이드바: 설정 ---
 with st.sidebar:
